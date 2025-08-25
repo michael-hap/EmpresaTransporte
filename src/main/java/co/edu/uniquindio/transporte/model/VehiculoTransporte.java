@@ -1,6 +1,4 @@
 package co.edu.uniquindio.transporte.model;
-import co.edu.uniquindio.transporte.model.Usuario;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +9,7 @@ public class VehiculoTransporte extends Vehiculo {
                               int maximoPasajeros) {
         super(placa, modelo, marca, color);
         this.maximoPasajeros = maximoPasajeros;
-        this.listaUsuarios = new ArrayList<Usuario>();
+        this.listaUsuarios = new ArrayList<>();
     }
 
     public int getMaximoPasajeros() { return maximoPasajeros; }
@@ -27,12 +25,10 @@ public class VehiculoTransporte extends Vehiculo {
     public void setListaUsuarios(List<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
     }
-    public void agregarUsuario(Usuario usuario) {
-        if (listaUsuarios.size() < maximoPasajeros) {
-            listaUsuarios.add(usuario);
-        } else {
-            System.out.println("El vehículo ya alcanzó su capacidad máxima.");
-        }
+
+
+    public void agregarUsuario(Usuario usuario){
+        listaUsuarios.add(usuario);
     }
 
 }

@@ -12,7 +12,7 @@ public class Main {
         ModelFactory factory = ModelFactory.getInstance();
         EmpresaTransporte empresa = new EmpresaTransporte();
 
-        // No datos quemados: empresa inicia vacía
+
         empresa.inicializarDatosDePrueba();
 
         boolean salir = false;
@@ -20,7 +20,7 @@ public class Main {
             System.out.println("\n===== MENÚ =====");
             System.out.println("1) Registrar Propietario + Vehículo de Carga");
             System.out.println("2) Registrar Propietario + Vehículo de Transporte");
-            System.out.println("3) Capturar usuarios movilizados hoy (por placa de transporte)");
+            System.out.println("3) Capturar usuarios movilizados hoy");
             System.out.println("4) Total pasajeros hoy");
             System.out.println("5) Total pasajeros por placa");
             System.out.println("6) (a) Propietarios con capacidad de carga > peso");
@@ -33,7 +33,6 @@ public class Main {
 
             try {
                 if ("1".equals(op)) {
-                    // Registrar propietario + vehículo de carga
                     System.out.print("Nombre: "); String nombre = sc.nextLine();
                     System.out.print("Cédula: "); String cedula = sc.nextLine();
                     System.out.print("Email: "); String email = sc.nextLine();
@@ -55,7 +54,6 @@ public class Main {
                     System.out.println(" Propietario y vehículo de carga registrados.");
 
                 } else if ("2".equals(op)) {
-                    // Registrar propietario + vehículo de transporte
                     System.out.print("Nombre: "); String nombre = sc.nextLine();
                     System.out.print("Cédula: "); String cedula = sc.nextLine();
                     System.out.print("Email: "); String email = sc.nextLine();
@@ -76,22 +74,25 @@ public class Main {
                     System.out.println(" Propietario y vehículo de transporte registrados.");
 
                 } else if ("3".equals(op)) {
-                    // Capturar usuarios por placa
-                    System.out.print("Placa del vehículo de transporte: "); String placa = sc.nextLine();
-                    VehiculoTransporte vt = empresa.buscarVehiculoTransportePorPlaca(placa);
-                    if (vt == null) {
-                        System.out.println(" No existe vehículo de transporte con esa placa.");
+
+                    System.out.print("Ingrese la placa del vehículo de transporte: ");
+                    String placa = sc.nextLine();
+
+
+                    Propietario propietario = empresa.buscarPropietarioPorPlaca(placa);
+                    if (propietario != null && propietario.getVehiculoPrincipal() instanceof VehiculoTransporte) {
+                        VehiculoTransporte transporte = (VehiculoTransporte) propietario.getVehiculoPrincipal();
+
+                        System.out.print("Ingrese edad del usuario: ");
+                        int edad = sc.nextInt(); sc.nextLine();
+                        Usuario usuario = new Usuario(edad);
+
+                        transporte.agregarUsuario(usuario);
+                        System.out.println(" Usuario agregado al vehículo con placa " + placa);
                     } else {
-                        System.out.print("¿Cuántos usuarios se movilizaron hoy en " + placa + "? ");
-                        int n = readInt(sc);
-                        for (int i = 1; i <= n; i++) {
-                            System.out.print("Edad del usuario " + i + ": ");
-                            int edadU = readInt(sc);
-                            Usuario u = factory.crearUsuario(edadU);
-                            empresa.agregarUsuarioEnPlaca(placa, u);
-                        }
-                        System.out.println("Registrados " + empresa.totalPasajerosPorPlaca(placa) + " usuarios en la placa " + placa);
+                        System.out.println("Vehículo no encontrado o no es de transporte.");
                     }
+
 
                 } else if ("4".equals(op)) {
                     System.out.println("Total pasajeros hoy: " + empresa.totalPasajerosDia());
@@ -136,7 +137,6 @@ public class Main {
         sc.close();
     }
 
-    // --- helpers de lectura (evitan problemas con nextInt/nextLine) ---
     private static int readInt(Scanner sc) {
         while (true) {
             String s = sc.nextLine();
